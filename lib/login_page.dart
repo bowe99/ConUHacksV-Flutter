@@ -1,35 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'dashboard_screen.dart';
-
-const users = const {
-  'd@gmail.com': '12345',
-  'hunter@gmail.com': 'hunter',
-};
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'globals.dart' as globals;
 
 class LoginScreen extends StatelessWidget {
-  Duration get loginTime => Duration(milliseconds: 2250);
+  Duration get loginTime => Duration(milliseconds: 2000);
 
   Future<String> _authUser(LoginData data) {
-    print('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(data.name)) {
-        return 'Username not exists';
+    return Future.delayed(loginTime).then((_) async{
+
+      var response = await http.post(globals.mainURL+'/login', body: {'email': data.name, 'password': data.password});
+
+      if(response.statusCode == 200){
+        final resp = json.decode(response.body);
+        if(resp['status'] != "success"){
+          return "Wrong username or password";
+        }
+        globals.userID = resp['msg'];
+        return null;
+      }else{
+        return "The server experiences an error";
       }
-      if (users[data.name] != data.password) {
-        return 'Password does not match';
-      }
-      return null;
     });
   }
 
   Future<String> _recoverPassword(String name) {
-    print('Name: $name');
     return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
-        return 'Username not exists';
-      }
-      return null;
+
+      return 'Not Working!';
+      
+      // Return Null when working
+      // return null;
     });
   }
 

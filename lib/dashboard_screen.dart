@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
+import 'globals.dart' as globals;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import './break.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -11,7 +13,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final meetings = <Courses>[];
   final breaks = <Break>[];
 
-  
+  @override
+  void initState() {
+    super.initState();
+    getAllCourses();
+
+  }
+  getAllCourses() async{
+      var response = await http.post(globals.mainURL+'/getcourses', body: {'userID': globals.userID});
+      // print(response.body);
+      if(response.statusCode == 200){
+        final resp = json.decode(response.body);
+        if(resp['status'] != "success"){
+          print( "Error ");
+        }
+        resp['msg'].asMap().forEach((index, value) => {
+        
+          _addCourses(newActivityName: value['name'], newClassNumber: value['classNumber'], newProfessor: value['professor'],
+          newSection: value['section'], start: (new DateTime.fromMillisecondsSinceEpoch(value['time']['start']['seconds'] * 1000)), end: (new DateTime.fromMillisecondsSinceEpoch(value['time']['end']['seconds'] * 1000)))
+        });    
+
+      }
+
+  }
 
   void _addCourses({
     DateTime start,
