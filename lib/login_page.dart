@@ -39,15 +39,15 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      title: 'Schedule Builder',
-      onLogin: _authUser,
-      onSignup: _authUser,
-      onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => DashboardScreen(),
-        ));
-      },
-      onRecoverPassword: _recoverPassword,
-    );
+            title: 'Schedule Builder',
+            onLogin: _authUser,
+            onSignup: _authUser,
+            onSubmitAnimationCompleted: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => DashboardScreen(),
+              ));
+            },
+            onRecoverPassword: _recoverPassword,
+          );
   }
 }

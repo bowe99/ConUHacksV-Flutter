@@ -40,7 +40,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   }
 
-
+  void _uploadCourse({
+    DateTime start,
+    DateTime end,
+    String newClassNumber,
+    String newActivityName,
+    String newProfessor,
+    String newSection,
+  })async{
+    var response = await http.post(globals.mainURL+'/newcourse', body: {
+      'userID': globals.userID,
+      'name': newActivityName,
+      'classNumber': newClassNumber,
+      'professor': newProfessor,
+      'section': newSection,
+      'start': start.toIso8601String(),
+      'end': end.toIso8601String()
+    });
+    // print(response.body);
+    if(response.statusCode == 200){
+      final resp = json.decode(response.body);
+      if(resp['status'] != "success"){
+        print( "Error ");
+      }
+      _addCourses(
+        newActivityName:
+            classNameController.text,
+        newClassNumber:
+            classNumberController.text,
+        newProfessor:
+            professorController.text,
+        newSection: sectionController.text,
+        start: DateTime.parse(yearController.text + '-' + monthController.text + 
+          '-' + dayController.text +' ' + timeStartController.text),
+        end: DateTime.parse(yearController.text +'-' + monthController.text + 
+          '-' +dayController.text +' ' +timeEndController.text)
+      );
+      print("DONE");
+      }
+  }
   void _addCourses({
     DateTime start,
     DateTime end,
@@ -103,7 +141,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Scheduling App',
+            'BookEd',
           ),
 
         ),
@@ -228,27 +266,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   borderRadius: BorderRadius.circular(40),
                                 ),
                                 onPressed: () {
-                                  _addCourses(
-                                      newActivityName: classNameController.text,
-                                      newClassNumber:
-                                          classNumberController.text,
-                                      newProfessor: professorController.text,
-                                      newSection: sectionController.text,
-                                      start: DateTime.parse(
-                                          yearController.text +
-                                              '-' +
-                                              monthController.text +
-                                              '-' +
-                                              dayController.text +
-                                              ' ' +
-                                              timeStartController.text),
-                                      end: DateTime.parse(yearController.text +
-                                          '-' +
-                                          monthController.text +
-                                          '-' +
-                                          dayController.text +
-                                          ' ' +
-                                          timeEndController.text));
+                                  _uploadCourse(
+                                              newActivityName:
+                                                  classNameController.text,
+                                              newClassNumber:
+                                                  classNumberController.text,
+                                              newProfessor:
+                                                  professorController.text,
+                                              newSection: sectionController.text,
+                                              start: DateTime.parse(
+                                                  yearController.text +
+                                                      '-' +
+                                                      monthController.text +
+                                                      '-' +
+                                                      dayController.text +
+                                                      ' ' +
+                                                      timeStartController.text),
+                                              end: DateTime.parse(
+                                                  yearController.text +
+                                                      '-' +
+                                                      monthController.text +
+                                                      '-' +
+                                                      dayController.text +
+                                                      ' ' +
+                                                      timeEndController.text));
                                 },
                               ),
                             )
