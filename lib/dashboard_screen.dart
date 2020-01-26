@@ -48,16 +48,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
         body: Column(
           children: <Widget>[
             Container(
-                height: 50,
-                width: double.infinity,
-                margin: EdgeInsets.all(10),
-                child: RaisedButton(
-                    color: Colors.yellow,
-                    textColor: Colors.black,
-                    child: Text(
-                      'New Class',
-                      style: TextStyle(fontSize: 18),
-                    ),
+              height: 400,
+              child: SfCalendar(
+                
+                  headerHeight: 40,
+                  view: CalendarView.week,
+                  dataSource: MeetingDataSource(_getDataSource(meetings)),
+                  timeSlotViewSettings: TimeSlotViewSettings(
+                    startHour: 8,
+                    endHour: 22,
+                  )),
+            ),
+            
+          ],
+
+        ),
+        floatingActionButton:FloatingActionButton(
+                    child: Icon(Icons.add),
                     onPressed: () {
                       showDialog(
                         context: context,
@@ -140,17 +147,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ])));
                         },
                       );
-                    })),
-            SfCalendar(
-                headerHeight: 40,
-                view: CalendarView.week,
-                dataSource: MeetingDataSource(_getDataSource(meetings)),
-                timeSlotViewSettings: TimeSlotViewSettings(
-                  startHour: 8,
-                  endHour: 22,
-                )),
-          ],
-        ));
+                    })
+        );
   }
 }
 

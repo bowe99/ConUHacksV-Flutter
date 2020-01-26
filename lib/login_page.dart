@@ -3,7 +3,7 @@ import 'package:flutter_login/flutter_login.dart';
 import 'dashboard_screen.dart';
 
 const users = const {
-  'dribbble@gmail.com': '12345',
+  'd@gmail.com': '12345',
   'hunter@gmail.com': 'hunter',
 };
 
