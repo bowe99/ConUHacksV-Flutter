@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import './break.dart';
+
 class DashboardScreen extends StatefulWidget {
   _DashboardScreenState createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final meetings = <Courses>[];
+  final breaks = <Break>[];
+
   
+
   void _addCourses({
     DateTime start,
     DateTime end,
@@ -28,6 +33,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {
       meetings.add(newCourse);
     });
+    
+    for (var time in meetings){
+      DateTime breakStart = time.to;
+      for(var checkTime in meetings){
+        if (checkTime.to != breakStart){
+          breaks.add(Break(breakStart, checkTime.from));
+        }
+
+      }
+        
+    }
+    
   }
 
   final classNumberController = TextEditingController();
@@ -52,15 +69,59 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: SfCalendar(
                 
                   headerHeight: 40,
-                  view: CalendarView.week,
-                  dataSource: MeetingDataSource(_getDataSource(meetings)),
+                  view: CalendarView.day,
+                  dataSource: MeetingDataSource(meetings),
                   timeSlotViewSettings: TimeSlotViewSettings(
                     startHour: 8,
                     endHour: 22,
                   )),
             ),
-            
-          ],
+            breaks.isNotEmpty ? Text(
+                                    'You have ' + breaks[0].breakTime().toString() + 'available on your next break. \nHere are some activities we would like to suggest:',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                  : Text(
+                                    'You have no breaks available.',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+          Container(
+          margin: EdgeInsets.all(20.0),
+          height: 200.0,
+          width: 200.0,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: <Widget>[
+              Container(
+                width: 200.0,
+                color: Colors.red,
+                
+              ),
+              Container(
+                width: 200.0,
+                color: Colors.blue,
+              ),
+              Container(
+                width: 200.0,
+                color: Colors.green,
+              ),
+              Container(
+                width: 200.0,
+                color: Colors.yellow,
+              ),
+              Container(
+                width: 200.0,
+                color: Colors.orange,
+              ),
+            ],
+          ),
+          )
+        ],
 
         ),
         floatingActionButton:FloatingActionButton(
@@ -115,36 +176,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     _userInput(
                                         name: 'Year ex: 2020',
                                         textController: yearController),
-                                    FlatButton(
-                                      child: Text('Submit'),
-                                      onPressed: () {
-                                        _addCourses(
-                                            newActivityName:
-                                                classNameController.text,
-                                            newClassNumber:
-                                                classNumberController.text,
-                                            newProfessor:
-                                                professorController.text,
-                                            newSection: sectionController.text,
-                                            start: DateTime.parse(
-                                                yearController.text +
-                                                    '-' +
-                                                    monthController.text +
-                                                    '-' +
-                                                    dayController.text +
-                                                    ' ' +
-                                                    timeStartController.text),
-                                            end: DateTime.parse(
-                                                yearController.text +
-                                                    '-' +
-                                                    monthController.text +
-                                                    '-' +
-                                                    dayController.text +
-                                                    ' ' +
-                                                    timeEndController.text));
-                                      },
+
+                                    Container(
+                                      width: 250,
+                                      margin: EdgeInsets.only(bottom: 20),
+                                      child: FlatButton(
+                                        child: Text('Submit'),
+                                        
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(40),
+                                          
+                                          ),
+                                        onPressed: () {
+                                          _addCourses(
+                                              newActivityName:
+                                                  classNameController.text,
+                                              newClassNumber:
+                                                  classNumberController.text,
+                                              newProfessor:
+                                                  professorController.text,
+                                              newSection: sectionController.text,
+                                              start: DateTime.parse(
+                                                  yearController.text +
+                                                      '-' +
+                                                      monthController.text +
+                                                      '-' +
+                                                      dayController.text +
+                                                      ' ' +
+                                                      timeStartController.text),
+                                              end: DateTime.parse(
+                                                  yearController.text +
+                                                      '-' +
+                                                      monthController.text +
+                                                      '-' +
+                                                      dayController.text +
+                                                      ' ' +
+                                                      timeEndController.text));
+                                        },
+                                      ),
                                     )
-                                  ])));
+                                  ]
+                                )
+                              )
+                            );
                         },
                       );
                     })
@@ -167,9 +241,6 @@ Widget _userInput({String name, TextEditingController textController}) {
   );
 }
 
-List<Courses> _getDataSource(List<Courses> meetings) {
-  return meetings;
-}
 
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(this.source);
