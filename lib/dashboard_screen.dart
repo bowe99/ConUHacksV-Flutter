@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('help'),
+          title: Text('Home'),
         ),
         body: Column(
           children: <Widget>[
