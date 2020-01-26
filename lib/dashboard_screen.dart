@@ -37,6 +37,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   }
 
+  void _uploadCourse({
+    DateTime start,
+    DateTime end,
+    String newClassNumber,
+    String newActivityName,
+    String newProfessor,
+    String newSection,
+  })async{
+    var response = await http.post(globals.mainURL+'/newcourse', body: {
+      'userID': globals.userID,
+      'name': newActivityName,
+      'classNumber': newClassNumber,
+      'professor': newProfessor,
+      'section': newSection,
+      'start': start.toIso8601String(),
+      'end': end.toIso8601String()
+    });
+    // print(response.body);
+    if(response.statusCode == 200){
+      final resp = json.decode(response.body);
+      if(resp['status'] != "success"){
+        print( "Error ");
+      }
+      _addCourses(
+        newActivityName:
+            classNameController.text,
+        newClassNumber:
+            classNumberController.text,
+        newProfessor:
+            professorController.text,
+        newSection: sectionController.text,
+        start: DateTime.parse(yearController.text + '-' + monthController.text + 
+          '-' + dayController.text +' ' + timeStartController.text),
+        end: DateTime.parse(yearController.text +'-' + monthController.text + 
+          '-' +dayController.text +' ' +timeEndController.text)
+      );
+      print("DONE");
+      }
+  }
+
   void _addCourses({
     DateTime start,
     DateTime end,
@@ -192,10 +232,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         name: 'End Time ex: 14:20',
                                         textController: timeEndController),
                                     _userInput(
-                                        name: 'Date ex: 6',
+                                        name: 'Date ex: 06',
                                         textController: dayController),
                                     _userInput(
-                                        name: 'Month ex: 1',
+                                        name: 'Month ex: 01',
                                         textController: monthController),
                                     _userInput(
                                         name: 'Year ex: 2020',
@@ -212,7 +252,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           
                                           ),
                                         onPressed: () {
-                                          _addCourses(
+                                          Visibility(
+                                            visible: false,
+                                            child: Icon(Icons.add)
+                                          );
+                                          _uploadCourse(
                                               newActivityName:
                                                   classNameController.text,
                                               newClassNumber:
