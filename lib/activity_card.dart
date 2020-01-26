@@ -7,12 +7,9 @@ class ActivityCard extends StatelessWidget {
 
   ActivityCard(this.name, this.location);
 
-
-  
-  
   @override
   Widget build(BuildContext context) {
-    return        Container(
+    return Container(
                     width: 200.0,
                     child: Card(
                       elevation: 10,
@@ -28,7 +25,7 @@ class ActivityCard extends StatelessWidget {
                                 child: Text(
                                   this.name,
                                   style: TextStyle(
-                                      fontSize: 24,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),

@@ -154,7 +154,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             children: <Widget>[
               Container(
-                height: 350,
+                margin: EdgeInsets.only(bottom: 20),
+                height: 400,
                 child: SfCalendar(
                     headerHeight: 40,
                     view: CalendarView.day,
@@ -181,7 +182,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   .toString())) +
                           ' available on your next break.',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,

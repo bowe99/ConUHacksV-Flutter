@@ -39,7 +39,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-            title: 'Schedule Builder',
+            title: 'BookEd',
             onLogin: _authUser,
             onSignup: _authUser,
             onSubmitAnimationCompleted: () {
