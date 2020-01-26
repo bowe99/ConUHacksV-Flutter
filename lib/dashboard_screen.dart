@@ -104,8 +104,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DateTime breakStart = time.to;
       for (var checkTime in meetings) {
         if (checkTime.to != breakStart) {
-          breaks.add(Break(breakStart, checkTime.from));
-          _reOrgBreaks();
+
+          var breakCheck = Break(breakStart, checkTime.from);
+          if(breakCheck.breakTime().inHours <= 12){
+            breaks.add(breakCheck);
+            _reOrgBreaks();
+          }
+          
         }
       }
     }
