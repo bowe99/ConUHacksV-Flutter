@@ -252,10 +252,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           
                                           ),
                                         onPressed: () {
-                                          Visibility(
-                                            visible: false,
-                                            child: Icon(Icons.add)
-                                          );
+                                          visible: false;
                                           _uploadCourse(
                                               newActivityName:
                                                   classNameController.text,
