@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
   final meetings = <Courses>[];
+  
   void _addCourses({
     DateTime start,
     DateTime end,
@@ -20,85 +25,148 @@ class DashboardScreen extends StatelessWidget {
         to: end,
         background: const Color(0xFF0F8644),
         isAllDay: false);
-    
+    setState(() {
+      meetings.add(newCourse);
+    });
   }
 
+  final classNumberController = TextEditingController();
+  final classNameController = TextEditingController();
+  final professorController = TextEditingController();
+  final sectionController = TextEditingController();
+  final timeStartController = TextEditingController();
+  final timeEndController = TextEditingController();
+  final dayController = TextEditingController();
+  final monthController = TextEditingController();
+  final yearController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          SfCalendar(
-              headerHeight: 40,
-              view: CalendarView.day,
-              dataSource: MeetingDataSource(_getDataSource(meetings)),
-              timeSlotViewSettings: TimeSlotViewSettings(
-                startHour: 8,
-                endHour: 22,
-              )
-            ),
+        appBar: AppBar(
+          title: Text('help'),
+        ),
+        body: Column(
+          children: <Widget>[
             Container(
-              width: double.infinity,
-              child: Row(
-                children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(labelText: 'Course Name'),
-                    //controller: titleController,
-                  ),
-                  TextField(
-                    decoration: InputDecoration(labelText: 'Course Number'),
-                    //controller: titleController,
-                  ),
-                  TextField(
-                    decoration: InputDecoration(labelText: 'Professor'),
-                    //controller: titleController,
-                  ),
-                  TextField(
-                    decoration: InputDecoration(labelText: 'Section'),
-                    //controller: titleController,
-                  ),
-                  Column(
-                    children: <Widget>[
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Start'),
-                        //controller: titleController,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(labelText: 'End'),
-                        //controller: titleController,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Day'),
-                        //controller: titleController,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Month'),
-                        //controller: titleController,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Year'),
-                        //controller: titleController,
-                      ),
-                    ],
-                  )
-                  
-
-                ],
-              ),
-            ),
-            RaisedButton(
-              child: Text('Add Class'),
-              onPressed: null ,
-            )
-
-        ],
-      ),
-    );
+                height: 50,
+                width: double.infinity,
+                margin: EdgeInsets.all(10),
+                child: RaisedButton(
+                    color: Colors.yellow,
+                    textColor: Colors.black,
+                    child: Text(
+                      'New Class',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40)),
+                              elevation: 16,
+                              child: Container(
+                                  height: 400.0,
+                                  width: 360.0,
+                                  child: ListView(children: <Widget>[
+                                    SizedBox(height: 20),
+                                    Center(
+                                      child: Text(
+                                        "New Class",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    _userInput(
+                                        name: 'Course Number ex: ECON 201',
+                                        textController: classNumberController),
+                                    _userInput(
+                                        name: 'Course Name ex: Microeconomics',
+                                        textController: classNameController),
+                                    _userInput(
+                                        name: 'Professor ex: Aiman Hanna',
+                                        textController: professorController),
+                                    _userInput(
+                                        name: 'Section ex: AA',
+                                        textController: sectionController),
+                                    _userInput(
+                                        name: 'Start Time ex: 11:30',
+                                        textController: timeStartController),
+                                    _userInput(
+                                        name: 'End Time ex: 14:20',
+                                        textController: timeEndController),
+                                    _userInput(
+                                        name: 'Date ex: 6',
+                                        textController: dayController),
+                                    _userInput(
+                                        name: 'Month ex: 1',
+                                        textController: monthController),
+                                    _userInput(
+                                        name: 'Year ex: 2020',
+                                        textController: yearController),
+                                    FlatButton(
+                                      child: Text('Submit'),
+                                      onPressed: () {
+                                        _addCourses(
+                                            newActivityName:
+                                                classNameController.text,
+                                            newClassNumber:
+                                                classNumberController.text,
+                                            newProfessor:
+                                                professorController.text,
+                                            newSection: sectionController.text,
+                                            start: DateTime.parse(
+                                                yearController.text +
+                                                    '-' +
+                                                    monthController.text +
+                                                    '-' +
+                                                    dayController.text +
+                                                    ' ' +
+                                                    timeStartController.text),
+                                            end: DateTime.parse(
+                                                yearController.text +
+                                                    '-' +
+                                                    monthController.text +
+                                                    '-' +
+                                                    dayController.text +
+                                                    ' ' +
+                                                    timeEndController.text));
+                                      },
+                                    )
+                                  ])));
+                        },
+                      );
+                    })),
+            SfCalendar(
+                headerHeight: 40,
+                view: CalendarView.week,
+                dataSource: MeetingDataSource(_getDataSource(meetings)),
+                timeSlotViewSettings: TimeSlotViewSettings(
+                  startHour: 8,
+                  endHour: 22,
+                )),
+          ],
+        ));
   }
+}
+
+Widget _userInput({String name, TextEditingController textController}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+    child: Column(
+      children: <Widget>[
+        SizedBox(height: 12),
+        TextField(
+          decoration: InputDecoration(labelText: name),
+          controller: textController,
+        ),
+      ],
+    ),
+  );
 }
 
 List<Courses> _getDataSource(List<Courses> meetings) {
