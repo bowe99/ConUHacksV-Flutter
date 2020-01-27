@@ -1,4 +1,4 @@
-# hail_mary
+# Break Finder
 
 A new Flutter project.
 
